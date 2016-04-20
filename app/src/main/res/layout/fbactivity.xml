@@ -15,6 +15,27 @@
         android:textColor="@android:color/holo_green_dark"
         android:textStyle="italic"
         />
+    <TextView
+        android:id="@+id/educationtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:text="@string/education"
+        android:textColor="@android:color/black"
+        android:textStyle="italic"
+        />
+    <TextView
+        android:id="@+id/education"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:textColor="@android:color/holo_green_dark"
+        android:textStyle="italic"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

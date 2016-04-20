@@ -43,6 +43,7 @@ public class SocialAppActivity extends AppCompatActivity {
     ProgressDialog progress;
     private String facebook_id, f_name, m_name, l_name, gender, profile_image, full_name, email_id;
     private AccessToken accessToken;
+    public static String _accessToken="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,8 @@ public class SocialAppActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 progress.show();
+
+                _accessToken= loginResult.getAccessToken().getToken();
                 Profile profile = Profile.getCurrentProfile();
                 if (profile != null) {
                     facebook_id = profile.getId();
@@ -73,6 +76,7 @@ public class SocialAppActivity extends AppCompatActivity {
                     m_name = profile.getMiddleName();
                     l_name = profile.getLastName();
                     full_name = profile.getName();
+
 
                     profile_image = profile.getProfilePictureUri(400, 400).toString();
 

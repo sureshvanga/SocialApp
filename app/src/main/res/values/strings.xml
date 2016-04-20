@@ -9,4 +9,5 @@
     <string name="profileview">View Friends List</string>
     <string name="lastfiveposts">View Last 5 posts</string>
     <string name="groups">View Groups</string>
+    <string name="education">Education:</string>
 </resources>

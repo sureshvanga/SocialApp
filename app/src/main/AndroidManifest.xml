@@ -31,6 +31,8 @@
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <activity android:name=".FacebookActivities"/>
+        <activity android:name=".HomeActivity"/>
+        <activity android:name=".LastFivePosts"/>
 
     </application>
 
