@@ -1,0 +1,12 @@
+
+
+
+//Using facebook explorer, we need to give permisssion . bellow is a link for facebook explorer tool link.
+
+https://developers.facebook.com/tools/explorer/
+
+//In this project as a admin i given a list of permission for reading facebook feed.
+1. user-about-me
+2.user-friends
+3.user-posts
+4.user_managed_groups

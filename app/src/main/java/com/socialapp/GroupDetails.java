@@ -14,51 +14,44 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by vanga.sureshkumar on 4/19/2016.
+ * Created by vanga.sureshkumar on 4/21/2016.
  */
-public class LastFivePosts extends Activity {
-    private String TAG = "LastFivePosts";
-    private ListView listViewstores;
+public class GroupDetails extends Activity {
+    private ListView listViewgroups;
+    private String TAG = "GroupDetails";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fbposts);
+        setContentView(R.layout.facebook_groups);
 
         setUpview();
+
 
         Intent intent = getIntent();
         String jsonArray = intent.getStringExtra("jsonarray");// receiving data from  FacebookActivities.java
 
 
-        ArrayList<String> stories_array = new  ArrayList<String>();
-        stories_array.clear();
+        ArrayList<String> groups_array = new  ArrayList<String>();
+        groups_array.clear();
         try {
             JSONArray postarray_obj = new JSONArray(jsonArray);
             System.out.println(postarray_obj.toString(2));
             for (int l = 0; l < postarray_obj.length(); l++) {
                 JSONObject story_obj = postarray_obj.getJSONObject(l);
-               /* Log.e(TAG, "=-=--stories--=-=" + story_obj.getString("story"));
-                stories_array.add(story_obj.getString("story"));*/
-
-                Log.e(TAG, "=-=--message--=-=" + story_obj.getString("message"));
-                stories_array.add(story_obj.getString("message"));
+                Log.e(TAG, "=-=--groups--=-=" + story_obj.getString("name"));
+                groups_array.add(story_obj.getString("name"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stories_array);
-        listViewstores.setAdapter(adapter);
-
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, groups_array);
+        listViewgroups.setAdapter(adapter);
     }
 
-    /*
-           Method: setupView
-           Desc: This method Initialize the resource UI elements..
-           Params: None
-       */
     private void setUpview() {
-        listViewstores = (ListView) findViewById(R.id.postlistView);
+        listViewgroups = (ListView) findViewById(R.id.grouplistView);
     }
 }

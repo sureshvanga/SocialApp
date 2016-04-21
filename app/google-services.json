@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_id": "socialapp-1288",
+    "project_number": "430617724184",
+    "name": "SocialApp"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430617724184:android:70e6a94dfd73feb2",
+        "client_id": "android:com.socialapp",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.socialapp",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430617724184-c6u0om93f47oj5ucdnn8776a37hhj7pi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.socialapp",
+            "certificate_hash": "C888E6AD258910B72024CFC88B5240480AC43334"
+          }
+        },
+        {
+          "client_id": "430617724184-basfova8898eqiun8kb53cntl6gmakrn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

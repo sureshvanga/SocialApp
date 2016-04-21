@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +45,7 @@ import java.util.Random;
  */
 public class FacebookActivities extends Activity implements View.OnClickListener{
     private Button viewProfile_btn, viewPosts_btn, viewgroup_btn;
-    private TextView username_tv, education_tv;
+    private TextView username_tv,lastname_tv,gender_tv,emailid_tv, education_tv;
     private String TAG = "FacebookActivities ";
     ProgressDialog progress;
     private JSONArray postarray_obj;
@@ -91,50 +95,60 @@ public class FacebookActivities extends Activity implements View.OnClickListener
                                 String lastname = res.getString("last_name");
                                 String gender = res.getString("gender");
 
-                                username_tv.setText("FirstName: " + firstname + "\n" + "LastName:" + lastname + "\n" + "Gender:" + gender + "\n" + "Email Id:" + email);
+
+                                username_tv.setText(firstname);
+                                lastname_tv.setText(lastname);
+                                gender_tv.setText(gender);
+                                emailid_tv.setText(email);
+
+
                                 JSONArray data = response.getJSONObject().optJSONArray("education");
                                 Log.e(TAG, "=-=--data--=-=" + data.length());
 
 
                                 ArrayList<String> education_array = new  ArrayList<String>();
                                 education_array.clear();
-                                for (int k = 0; k < data.length(); k++) {
-                                    try {
-                                        JSONObject edu_obj = data.getJSONObject(k);
+                                if(data!=null){
+                                    for (int k = 0; k < data.length(); k++) {
+                                        try {
+                                            JSONObject edu_obj = data.getJSONObject(k);
 
-                                        JSONObject school_obj = edu_obj.getJSONObject("school");
-                                        Log.e(TAG, "=-=--school names--=-=" + school_obj.getString("name"));
-                                        education_array.add(school_obj.getString("name"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                            JSONObject school_obj = edu_obj.getJSONObject("school");
+                                            Log.e(TAG, "=-=--school names--=-=" + school_obj.getString("name"));
+                                            education_array.add(school_obj.getString("name"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
                                     }
-
+                                    StringBuilder builder = new StringBuilder();
+                                    for (String details : education_array) {
+                                        builder.append(details + "\n");
+                                    }
+                                    education_tv.setText(builder.toString());
                                 }
+
 
                                 ArrayList<String> stories_array = new  ArrayList<String>();
                                 stories_array.clear();
                                 postarray_obj = new JSONArray();
+                                if(data!=null) {
+                                    JSONObject posts_obj = res.getJSONObject("posts");
 
-                                JSONObject posts_obj = res.getJSONObject("posts");
-                                 postarray_obj = posts_obj.getJSONArray("data");
+                                    if (posts_obj != null) {
+                                        postarray_obj = posts_obj.getJSONArray("data");
 
-                                for (int l = 0; l < postarray_obj.length(); l++) {
-                                    JSONObject story_obj = postarray_obj.getJSONObject(l);
-                                    Log.e(TAG, "=-=--stories--=-=" + story_obj.getString("story"));
-                                    stories_array.add(story_obj.getString("story"));
+                                        for (int l = 0; l < postarray_obj.length(); l++) {
+                                            JSONObject story_obj = postarray_obj.getJSONObject(l);
+                                           /* Log.e(TAG, "=-=--stories--=-=" + story_obj.getString("story"));
+                                            stories_array.add(story_obj.getString("story"));*/
+
+                                            Log.e(TAG, "=-=--message--=-=" + story_obj.getString("message"));
+                                            stories_array.add(story_obj.getString("message"));
+                                        }
+                                    }
+
                                 }
-
-
-
-
-                                StringBuilder builder = new StringBuilder();
-                                for (String details : education_array) {
-                                    builder.append(details + "\n");
-                                }
-
-                                education_tv.setText(builder.toString());
-
-
                             }catch(Exception e){
                                 e.printStackTrace();
                             }
@@ -156,6 +170,10 @@ public class FacebookActivities extends Activity implements View.OnClickListener
     */
     private void setUpView() {
         username_tv = (TextView)findViewById(R.id.username);
+        lastname_tv = (TextView)findViewById(R.id.lastname);
+        gender_tv = (TextView)findViewById(R.id.gender);
+        emailid_tv = (TextView)findViewById(R.id.emailid);
+
         education_tv = (TextView)findViewById(R.id.education);
         viewProfile_btn = (Button)findViewById(R.id.viewprofile);
         viewPosts_btn = (Button)findViewById(R.id.lastfivepost);
@@ -193,22 +211,19 @@ public class FacebookActivities extends Activity implements View.OnClickListener
                                 JSONArray data = response.getJSONObject().optJSONArray("data");
                                 Log.e(TAG, "=-=--data length--=-=" + data.length());
 
-                                for (int i = 0; i < data.length(); i++) {
-                                    try {
-                                        JSONObject fnd_obj = data.getJSONObject(i);
-                                        Log.e(TAG, "=-=--Friends names--=-=" + fnd_obj.getString("name"));
-                                        fndslist_array.add(fnd_obj.getString("name"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-                                }
                                 /* make the Intent call */
-                                Intent i = new Intent(FacebookActivities.this, HomeActivity.class);
-                                i.putExtra("jsondata", data.toString());
-                                progress.dismiss();
-                                startActivity(i);
+                                try{
+                                    if(data.length()>0 || data!=null){
+                                        Intent i = new Intent(FacebookActivities.this, HomeActivity.class);
+                                        i.putExtra("jsondata", data.toString());
+                                        progress.dismiss();
+                                        startActivity(i);
+                                    }
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+
 
 
                             }
@@ -219,12 +234,60 @@ public class FacebookActivities extends Activity implements View.OnClickListener
                 break;
             case R.id.lastfivepost:
                 /* make the Intent call */
-                Intent in = new Intent(FacebookActivities.this, LastFivePosts.class);
-                in.putExtra("jsonarray", postarray_obj.toString());
-                startActivity(in);
+
+
+                    try{
+                        if(postarray_obj.length()>0||postarray_obj!=null){
+                        Intent in = new Intent(FacebookActivities.this, LastFivePosts.class);
+                        in.putExtra("jsonarray", postarray_obj.toString());
+                        startActivity(in);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+
+
+
                 break;
             case R.id.viewgroups:
 
+                final ArrayList<String> groups_array = new  ArrayList<String>();
+                groups_array.clear();
+
+                Bundle param = new Bundle();
+                param.putString("fields", "name");
+                new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "me/groups",
+                        param,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                JSONObject res = response.getJSONObject();
+
+                                if(res!=null){
+                                    Log.e(TAG, "=-GROUP=-=-"+res.toString());
+                                    JSONArray data = response.getJSONObject().optJSONArray("data");
+
+
+                                        try{
+                                            if(data.length()>0|| data!=null){
+                                            Intent i = new Intent(FacebookActivities.this, GroupDetails.class);
+                                            i.putExtra("jsonarray", data.toString());
+                                            progress.dismiss();
+                                            startActivity(i);
+                                            }
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+
+
+
+                                }
+                            }
+                        }
+                ).executeAsync();
                 break;
         }
     }
