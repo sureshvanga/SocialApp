@@ -13,12 +13,12 @@
         android:textSize="25sp"
         android:textColor="@color/bluecolor"
         android:textStyle="italic"
-        android:text="Facebook Groups List:"/>-->
+        android:text="@string/grouplist"/>-->
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/grouplistView"
+        android:id="@+id/listView"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true" />
 

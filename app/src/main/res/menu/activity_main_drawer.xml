@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/profile_item"
+            android:icon="@drawable/name"
+            android:title="@string/title_profile" />
+        <item
+            android:id="@+id/friends_item"
+            android:icon="@drawable/name"
+            android:title="@string/title_friends" />
+
+        <item
+            android:id="@+id/message_title"
+            android:icon="@drawable/message"
+            android:title="@string/title_messages" />
+        <item
+            android:id="@+id/mysettings"
+            android:icon="@drawable/message"
+            android:title="@string/title_messages" />
+
+        <item
+            android:id="@+id/group_title"
+            android:icon="@drawable/name"
+            android:title="@string/title_groups" />
+        <item
+            android:id="@+id/singnout_item"
+            android:icon="@drawable/signout"
+            android:title="@string/title_signout" />
+
+    </group>
+
+   <!-- <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>-->
+
+</menu>

@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
 
-    <TextView
+    <!--<TextView
         android:id="@+id/posts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         android:textSize="25sp"
         android:textColor="@color/bluecolor"
         android:textStyle="italic"
-        android:text="User Posts:"/>
+        android:text="User Facebook Posts:"/>-->
 
     <ListView
         android:layout_width="wrap_content"

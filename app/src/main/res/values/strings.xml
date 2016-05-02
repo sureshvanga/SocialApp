@@ -9,8 +9,79 @@
     <string name="profileview">View Friends List</string>
     <string name="lastfiveposts">View Last 5 posts</string>
     <string name="groups">View Groups</string>
-    <string name="education">Education:</string>
+    <string name="education">Education :</string>
 
     <string name="sign_out">Sign Out</string>
     <string name="disconnect">Disconnect</string>
+    <string name="friendslist">Friends List (Max 100):</string>
+    <string name="grouplist">Groups List:</string>
+
+
+    <string name="action_search">Search</string>
+
+    <string name="drawer_open">Open</string>
+
+    <string name="drawer_close">Close</string>
+
+    <string name="nav_item_home">Home</string>
+
+    <string name="nav_item_friends">Friends</string>
+
+    <string name="nav_item_notifications">Posts</string>
+
+    <string name="nav_item_groups">Groups</string>
+
+    <string name="nav_item_signout">Sign Out</string>
+
+    <!-- navigation drawer item labels -->
+
+
+    <string-array name="nav_drawer_labels">
+
+        <item>@string/nav_item_home</item>
+        <item>@string/nav_item_friends</item>
+        <item>@string/nav_item_notifications</item>
+        <item>@string/nav_item_groups</item>
+        <item>@string/nav_item_signout</item>
+    </string-array>
+
+    <string-array name="nav_drawer_labelsforgmail">
+
+        <item>@string/nav_item_home</item>
+        <item>@string/nav_item_signout</item>
+    </string-array>
+
+
+    <string-array name="fb_imgs">
+        <item>@drawable/ic_menuhome</item>
+        <item>@drawable/aboutus</item>
+        <item>@drawable/message</item>
+        <item>@drawable/settings</item>
+        <item>@drawable/signout</item>
+    </string-array>
+    <string-array name="gmail_imgs">
+        <item>@drawable/ic_menuhome</item>
+        <item>@drawable/signout</item>
+    </string-array>
+
+    <string-array name="nav_drawer_labels_gmail">
+
+        <item>@string/nav_item_home</item>
+
+
+    </string-array>
+
+
+    <string name="title_messages">Posts</string>
+
+    <string name="title_friends">Friends</string>
+
+    <string name="title_home">Profile</string>
+
+    <string name="title_groups">Groups</string>
+
+    <string name="title_signout">Sign Out</string>
+
+    <string name="title_profile">Profile</string>
+
 </resources>

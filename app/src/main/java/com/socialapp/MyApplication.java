@@ -8,15 +8,12 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by vanga.sureshkumar on 4/19/2016.
- */
 public class MyApplication extends Application {
+
     @Override
     public void onCreate() {
         super.onCreate();

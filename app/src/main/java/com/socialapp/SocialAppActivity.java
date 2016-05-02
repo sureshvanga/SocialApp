@@ -1,10 +1,13 @@
 package com.socialapp;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -40,6 +44,7 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
+
 import android.content.IntentSender.SendIntentException;
 
 import com.google.android.gms.plus.Plus;
@@ -52,19 +57,27 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.util.Arrays;
 
-public class SocialAppActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,ConnectionCallbacks, View.OnClickListener {
+import model.LoginResponseValues;
+/*
+  Created by V.Suresh
+  Dated 05-02-2016
+
+ */
+public class SocialAppActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, ConnectionCallbacks, View.OnClickListener {
 
     private String TAG = "SocialAppActivity";
+    Typeface typeface;
+    TextView log;
     //For facebook
     private CallbackManager callbackManager;
     GoogleApiClient google_api_client;
     GoogleApiAvailability google_api_availability;
-
+    SocialAppActivity sc = this;
     private Button facebook_button;
     ProgressDialog progress;
     private String facebook_id, f_name, m_name, l_name, gender, profile_image, full_name, email_id;
     private AccessToken accessToken;
-    public static String _accessToken="";
+    public static String _accessToken = "";
     private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
     SignInButton signIn_btn;
     private boolean is_signInBtn_clicked;
@@ -73,7 +86,8 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
     private boolean is_intent_inprogress;
     private static final int SIGN_IN_CODE = 0;
     private static final int PROFILE_PIC_SIZE = 120;
-    private String personName,personPhotoUrl,email,dob,tagleline,aboutme;
+    private String personName, personPhotoUrl, email, dob, tagleline, aboutme;
+    private static long back_pressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +95,10 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
 
         buidNewGoogleApiClient();
         setContentView(R.layout.content_main);
-
+        typeface = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Ubuntu-Light.ttf");
         custimizeSignBtn();
+        log = (TextView) findViewById(R.id.log);
+        log.setTypeface(typeface);
 
         facebook_button = (Button) findViewById(R.id.btn_facebbook);
 
@@ -101,34 +117,23 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
             @Override
             public void onSuccess(LoginResult loginResult) {
                 progress.show();
+                Intent i = new Intent(SocialAppActivity.this, MainActivity.class);
+                LoginResponseValues.getInstance().setIsGmail(0);
+                progress.dismiss();
+                startActivity(i);
 
-                _accessToken = loginResult.getAccessToken().getToken();
-                Profile profile = Profile.getCurrentProfile();
-                if (profile != null) {
-                    facebook_id = profile.getId();
-                    f_name = profile.getFirstName();
-                    m_name = profile.getMiddleName();
-                    l_name = profile.getLastName();
-                    full_name = profile.getName();
-                    profile_image = profile.getProfilePictureUri(400, 400).toString();
-
-                    Log.e(TAG, "Fb f_name,  l_name=-=-=-=-" + f_name + "\n" + l_name+"\n"+m_name);
-
-                    Intent i = new Intent(SocialAppActivity.this, FacebookActivities.class);
-                    progress.dismiss();
-                    startActivity(i);
-                    finish();
-                }
             }
 
             @Override
             public void onCancel() {
-
+                // App code
+                Log.v("LoginActivity", "cancel");
             }
 
             @Override
             public void onError(FacebookException error) {
-
+                // App code
+                Log.v("LoginActivity", error.getCause().toString());
             }
         });
 
@@ -152,7 +157,7 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
   may be displayed when only basic profile is requested. Try adding the
   Plus.SCOPE_PLUS_LOGIN scope to see the  difference.
 */
-    private void custimizeSignBtn(){
+    private void custimizeSignBtn() {
 
         signIn_btn = (SignInButton) findViewById(R.id.sign_in_button);
         signIn_btn.setSize(SignInButton.SIZE_STANDARD);
@@ -174,7 +179,7 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
         }
     }
 
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         if (google_api_client.isConnected()) {
             google_api_client.connect();
@@ -186,10 +191,10 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
    While initializing the GoogleApiClient object, request the Plus.SCOPE_PLUS_LOGIN scope.
    */
     private void buidNewGoogleApiClient() {
-        google_api_client =  new GoogleApiClient.Builder(this)
+        google_api_client = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                .addApi(Plus.API,Plus.PlusOptions.builder().build())
+                .addApi(Plus.API, Plus.PlusOptions.builder().build())
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
     }
@@ -206,7 +211,6 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
             if (resultCode != RESULT_OK) {
                 is_signInBtn_clicked = false;
                 progress.dismiss();
-                Log.e(TAG, "-==-=onActivityResult=-=--=");
 
             }
 
@@ -230,13 +234,12 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     public void onConnectionSuspended(int i) {
         google_api_client.connect();
-        //changeUI(false);
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         if (!result.hasResolution()) {
-            google_api_availability.getErrorDialog(this, result.getErrorCode(),request_code).show();
+            google_api_availability.getErrorDialog(this, result.getErrorCode(), request_code).show();
             return;
         }
 
@@ -253,10 +256,10 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
 
     /**
      * Sign-in into the Google + account
-     * */
+     */
     private void gPlusSignIn() {
         if (!google_api_client.isConnecting()) {
-            Log.d("user connected","connected");
+            Log.d("user connected", "connected");
             is_signInBtn_clicked = true;
             progress.show();
             resolveSignInError();
@@ -268,7 +271,6 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-                Toast.makeText(this, "start sign process", Toast.LENGTH_SHORT).show();
                 gPlusSignIn();
                 break;
 
@@ -289,7 +291,7 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
             } catch (SendIntentException e) {
                 is_intent_inprogress = false;
                 google_api_client.connect();
-            }catch (Exception e1){
+            } catch (Exception e1) {
                 is_intent_inprogress = false;
                 google_api_client.connect();
             }
@@ -305,16 +307,16 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
             Plus.AccountApi.clearDefaultAccount(google_api_client);
             google_api_client.disconnect();
             google_api_client.connect();
-            //changeUI(false);
 
-            Intent i = new Intent(SocialAppActivity.this, GmailDetails.class);
-            i.putExtra("NAME", personName);
-            i.putExtra("EmailID",email);
-            i.putExtra("DOB", dob);
-            i.putExtra("TAGLE_LINE", tagleline);
-            i.putExtra("ABOUT_ME", aboutme);
-            i.putExtra("PHOTO_URL", personPhotoUrl);
 
+            Intent i = new Intent(SocialAppActivity.this, MainActivity.class);
+            LoginResponseValues.getInstance().setIsGmail(1);
+            LoginResponseValues.getInstance().setName(personName);
+            LoginResponseValues.getInstance().setEmailId(email);
+            LoginResponseValues.getInstance().setDob(dob);
+            LoginResponseValues.getInstance().setToggleLine(tagleline);
+            LoginResponseValues.getInstance().setAboutme(aboutme);
+            LoginResponseValues.getInstance().setPhotoUrl(personPhotoUrl);
             startActivity(i);
         }
     }
@@ -333,24 +335,22 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
                             Log.d(TAG, "User access revoked!");
                             buidNewGoogleApiClient();
                             google_api_client.connect();
-                           // changeUI(false);
                         }
 
                     });
         }
     }
 
-    private void setPersonalInfo(Person currentPerson){
+    private void setPersonalInfo(Person currentPerson) {
 
-         personName = currentPerson.getDisplayName();
-         personPhotoUrl = currentPerson.getImage().getUrl();
-         email = Plus.AccountApi.getAccountName(google_api_client);
+        personName = currentPerson.getDisplayName();
+        personPhotoUrl = currentPerson.getImage().getUrl();
+        email = Plus.AccountApi.getAccountName(google_api_client);
 
-        Log.e(TAG, "-=-=-=Gmail name-=-=" + personName + "\n" + email);
 
-         dob = currentPerson.getBirthday();
-         tagleline = currentPerson.getTagline();
-         aboutme = currentPerson.getAboutMe();
+        dob = currentPerson.getBirthday();
+        tagleline = currentPerson.getTagline();
+        aboutme = currentPerson.getAboutMe();
 
         progress.dismiss();
         gPlusSignOut();
@@ -381,6 +381,14 @@ public class SocialAppActivity extends AppCompatActivity implements GoogleApiCli
 
     }
 
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        //Exit When Back and Set no History
+        finish();
+        System.exit(0);
+
+    }
 }
 
 
